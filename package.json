@@ -1,0 +1,20 @@
+{
+	"name": "spx-gc",
+	"version": "1.0.0",
+	"api_version": "1.0.0",
+	"keywords": [
+		"graphics",
+		"software"
+	],
+	"manufacturer": "SPX",
+	"product": "GC",
+	"shortname": "SPX-GC",
+	"description": "Module to control SPX-GC",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "JeffreyDavidsz <jeffrey.davidsz@vicreo.eu>",
+	"license": "MIT",
+  "repository": "https://github.com/bitfocus/companion-module-spx-gc.git"
+}
