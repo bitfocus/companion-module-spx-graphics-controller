@@ -168,59 +168,59 @@ class instance extends instance_skel {
 		switch (action.action) {
 			case 'play':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/play`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/play`
 				break
 			case 'play_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/play/${opt.id}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/play/${opt.id}`
 				break
 			case 'continue':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/continue`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/continue`
 				break
 			case 'continue_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/continue/${opt.id}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/continue/${opt.id}`
 				break
 			case 'stop':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/stop`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/stop`
 				break
 			case 'stop_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/item/stop/${opt.id}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/stop/${opt.id}`
 				break
 			case 'focusFirst':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/focusFirst`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusFirst`
 				break
 			case 'focusNext':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/focusNext`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusNext`
 				break
 			case 'focusPrevious':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/focusPrevious`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusPrevious`
 				break
 			case 'focusLast':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/focusLast`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusLast`
 				break
 			case 'stopAllLayers':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/stopAllLayers`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/stopAllLayers`
 				break
 			case 'openRundown':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/rundown/load?file=${opt.rundown}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/load?file=${opt.rundown}`
 				break
 			case 'directplayout':
 				method = 'POST'
-				cmd = `http://${this.config.host}:5000/api/v1/directplayout`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/directplayout`
 				break
 			case 'invokeTemplateFunction':
 				method = 'GET'
-				cmd = `http://${this.config.host}:5000/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
 				break
 		}
 		if (cmd != undefined) {
@@ -269,6 +269,16 @@ class instance extends instance_skel {
 				id: 'host',
 				width: 6,
 				regex: this.REGEX_IP,
+				default: '127.0.0.1',
+				required: true,
+			},
+			{
+				type: 'textinput',
+				label: 'Target port',
+				id: 'port',
+				width: 6,
+				regex: this.REGEX_PORT,
+				default: '5000',
 				required: true,
 			},
 		]
@@ -338,6 +348,7 @@ class instance extends instance_skel {
 		this.config = config
 		this.actions()
 		this.initPresets()
+		this.initConnection()
 	}
 }
 
