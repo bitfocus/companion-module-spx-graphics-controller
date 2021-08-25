@@ -3,8 +3,6 @@ const { initPresets } = require('./presets')
 const fetch = require('node-fetch')
 let debug = () => {}
 
-const INTERVAL = 1000
-
 class instance extends instance_skel {
 	/**
 	 * Create an instance of the module
@@ -37,12 +35,10 @@ class instance extends instance_skel {
 			label: 'Start item by ID',
 			options: [
 				{
-					type: 'number',
-					label: 'Number',
+					type: 'textinput',
+					label: 'ID',
 					id: 'id',
-					default: 1,
-					min: 1,
-					max: 20,
+					default: '0123456789',
 				},
 			],
 		}
@@ -50,12 +46,10 @@ class instance extends instance_skel {
 			label: 'Continue to item by ID',
 			options: [
 				{
-					type: 'number',
-					label: 'Number',
+					type: 'textinput',
+					label: 'ID',
 					id: 'id',
-					default: 1,
-					min: 1,
-					max: 20,
+					default: '01234656789',
 				},
 			],
 		}
@@ -63,12 +57,10 @@ class instance extends instance_skel {
 			label: 'Stop item by ID',
 			options: [
 				{
-					type: 'number',
-					label: 'Number',
+					type: 'textinput',
+					label: 'ID',
 					id: 'id',
-					default: 1,
-					min: 1,
-					max: 20,
+					default: '0123456789',
 				},
 			],
 		}
@@ -228,9 +220,7 @@ class instance extends instance_skel {
 				break
 			case 'invokeTemplateFunction':
 				method = 'GET'
-				cmd = `http://${
-					this.config.host
-				}:5000/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
+				cmd = `http://${this.config.host}:5000/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
 				break
 		}
 		if (cmd != undefined) {
