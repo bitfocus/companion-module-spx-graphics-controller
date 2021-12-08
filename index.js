@@ -1,5 +1,5 @@
 const instance_skel = require('../../instance_skel')
-const { initPresets } = require('./presets')
+const { initPresets, getRundown } = require('./presets')
 const fetch = require('node-fetch')
 let debug = () => {}
 
@@ -14,8 +14,8 @@ class instance extends instance_skel {
 	 */
 	constructor(system, id, config) {
 		super(system, id, config)
-
 		this.actions() // export actions
+		
 	}
 
 	/**
@@ -280,7 +280,7 @@ class instance extends instance_skel {
 				regex: this.REGEX_PORT,
 				default: '5000',
 				required: true,
-			},
+			}
 		]
 	}
 
@@ -319,7 +319,8 @@ class instance extends instance_skel {
 	 * @access protected
 	 * @since 1.1.0
 	 */
-	initPresets() {
+	async initPresets() {
+		this.rundownItems = await getRundown(this.config.host,this.config.port)
 		this.setPresetDefinitions(initPresets.bind(this)())
 	}
 
