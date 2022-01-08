@@ -15,7 +15,7 @@ class instance extends instance_skel {
 	constructor(system, id, config) {
 		super(system, id, config)
 		this.actions() // export actions
-		
+		this.RUNDOWN_POLL_INTERVAL = 1000
 	}
 
 	/**
@@ -320,8 +320,15 @@ class instance extends instance_skel {
 	 * @since 1.1.0
 	 */
 	async initPresets() {
-		this.rundownItems = await getRundown(this.config.host,this.config.port)
-		this.setPresetDefinitions(initPresets.bind(this)())
+		if (this.rundownInterval) {
+			clearInterval(this.rundownInterval);
+		}
+		this.rundownInterval = setInterval(() => {
+			getRundown(this.config.host,this.config.port).then((items) => {
+				this.rundownItems = items;
+				this.setPresetDefinitions(initPresets.bind(this)());
+			})
+		}, this.RUNDOWN_POLL_INTERVAL)
 	}
 
 	/**
