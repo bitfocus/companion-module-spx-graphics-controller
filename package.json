@@ -1,6 +1,6 @@
 {
 	"name": "spx-gc",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"api_version": "1.0.0",
 	"keywords": [
 		"graphics",
@@ -17,7 +17,7 @@
 	"author": "JeffreyDavidsz <jeffrey.davidsz@vicreo.eu>",
 	"license": "MIT",
 	"repository": "https://github.com/bitfocus/companion-module-spx-gc.git",
-	"dependencies": {
+	"devDependencies": {
 		"chia": "0.0.1",
 		"mocha": "^9.1.3"
 	}
