@@ -16,8 +16,15 @@
 	},
 	"author": "JeffreyDavidsz <jeffrey.davidsz@vicreo.eu>",
 	"license": "MIT",
-	"repository": "https://github.com/bitfocus/companion-module-spx-gc.git",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-spx-gc.git"
+	},
 	"devDependencies": {
 		"mocha": "^9.1.3"
+	},
+	"homepage": "https://github.com/bitfocus/companion-module-spx-gc#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-spx-gc/issues"
 	}
 }
