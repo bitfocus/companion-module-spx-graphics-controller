@@ -1,0 +1,26 @@
+{
+	"id": "spx-grapics-controller-fork",
+	"name": "SPX Graphics Controller",
+	"shortname": "spx-fork",
+	"description": "",
+	"version": "0.0.0",
+	"license": "MIT",
+	"repository": "git+https://github.com/bitfocus/companion-module-your-module-name.git",
+	"bugs": "https://github.com/bitfocus/companion-module-your-module-name/issues",
+	"maintainers": [
+		{
+			"name": "Your name",
+			"email": "Your email"
+		}
+	],
+	"runtime": {
+		"type": "node18",
+		"api": "nodejs-ipc",
+		"apiVersion": "0.0.0",
+		"entrypoint": "../main.js"
+	},
+	"legacyIds": [],
+	"manufacturer": "Your company",
+	"products": ["Your product"],
+	"keywords": []
+}

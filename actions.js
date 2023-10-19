@@ -1,38 +1,19 @@
-const instance_skel = require('../../instance_skel')
-const { initPresets, getRundown } = require('./presets')
-const fetch = require('node-fetch')
-let debug = () => {}
+module.exports = {
+	// Define and expose available actions to SPX
+	initActions: function () {
+		let self = this;
+		let actions = {};
 
-class instance extends instance_skel {
-	/**
-	 * Create an instance of the module
-	 *
-	 * @param {EventEmitter} system - the brains of the operation
-	 * @param {string} id - the instance ID
-	 * @param {Object} config - saved user configuration parameters
-	 * @since 1.0.0
-	 */
-	constructor(system, id, config) {
-		super(system, id, config)
-		this.actions() // export actions
-		
-	}
+		actions.play = {
+			name: "Start focused item",
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			}
+		};
 
-	/**
-	 * Setup the actions.
-	 *
-	 * @param {EventEmitter} system - the brains of the operation
-	 * @access public
-	 * @since 1.0.0
-	 */
-	actions(system) {
-		const actions = {}
-
-		actions['play'] = { label: 'Start focused item' }
-		actions['continue'] = { label: 'Continue' }
-		actions['stop'] = { label: 'Stop focused item' }
-		actions['play_ID'] = {
-			label: 'Start item by ID',
+		actions.play_ID = {
+			name: 'Start item by ID',
 			options: [
 				{
 					type: 'textinput',
@@ -41,20 +22,22 @@ class instance extends instance_skel {
 					default: '0123456789',
 				},
 			],
+			callback: function (action) {
+				self.doAction(action)
+			}
+		};
+
+
+		actions.continue = {
+			name: 'Continue focused item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
 		}
-		actions['continue_ID'] = {
-			label: 'Continue to item by ID',
-			options: [
-				{
-					type: 'textinput',
-					label: 'ID',
-					id: 'id',
-					default: '01234656789',
-				},
-			],
-		}
-		actions['stop_ID'] = {
-			label: 'Stop item by ID',
+
+		actions.continue_ID = {
+			name: 'Continue item by ID',
 			options: [
 				{
 					type: 'textinput',
@@ -63,14 +46,76 @@ class instance extends instance_skel {
 					default: '0123456789',
 				},
 			],
+			callback: function (action) {
+				self.doAction(action)
+			},
 		}
-		actions['focusFirst'] = { label: 'Move focus to the first item on the rundown' }
-		actions['focusNext'] = { label: 'Move focus down to the next item' }
-		actions['focusPrevious'] = { label: 'Move focus up to the previous item' }
-		actions['focusLast'] = { label: 'Move focus to the last item on the rundown' }
-		actions['stopAllLayers'] = { label: 'Animate all layers out (does not clear layers)' }
-		actions['openRundown'] = {
-			label: 'Open rundown from project / file.',
+
+		actions.stop = {
+			name: 'Stop focused item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.stop_ID = {
+			name: 'Stop item by ID',
+			options: [
+				{
+					type: 'textinput',
+					label: 'ID',
+					id: 'id',
+					default: '0123456789',
+				},
+			],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.focusFirst = {
+			name: 'Focus on the first item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.focusNext = {
+			name: 'Focus on the next item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.focusPrevious = {
+			name: 'Focus on the previous item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.focusLast = {
+			name: 'Focus on the last item',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.stopAllLayers = {
+			name: 'Stop all layers',
+			options: [],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.openRundown = {
+			name: 'Open rundown',
 			options: [
 				{
 					type: 'textinput',
@@ -79,9 +124,46 @@ class instance extends instance_skel {
 					default: 'MyFirstProject/MyFirstRundown',
 				},
 			],
+			callback: function (action) {
+				self.doAction(action)
+			},
 		}
-		actions['directplayout'] = {
-			label: 'Execute a direct play/continue/stop -command to a template without current rundown',
+
+
+		actions.controlRundownItem = {
+			name: 'Play/Stop/Continue an item from a known rundown',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Project/file',
+					id: 'file',
+					default: 'MyFirstProject/MyFirstRundown',
+				},
+				{
+					type: 'textinput',
+					label: 'Id',
+					id: 'id',
+					default: '0123456789',
+				},
+				{
+					type: 'dropdown',
+					label: 'Action',
+					id: 'command',
+					choices: [
+						{ id: 'play', label: 'Play' },
+						{ id: 'stop', label: 'Stop' },
+						{ id: 'continue', label: 'Continue' },
+					],
+					default: 'play',
+				},
+			],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
+
+		actions.directplayout = {
+			name: 'Direct playout',
 			options: [
 				{
 					type: 'textinput',
@@ -91,9 +173,13 @@ class instance extends instance_skel {
 						'"casparServer": "OVERLAY", "casparChannel": "1", "casparLayer": "20", "webplayoutLayer": "20", "relativeTemplatePath": "vendor/pack/templatefile.html", "command": "play"',
 				},
 			],
+			callback: function (action) {
+				self.doAction(action)
+			},
 		}
-		actions['invokeTemplateFunction'] = {
-			label: 'Uses an invoke handler to call a function in a template',
+
+		actions.invokeTemplateFunction = {
+			name: 'Invoke template function',
 			options: [
 				{
 					type: 'textinput',
@@ -150,22 +236,20 @@ class instance extends instance_skel {
 					default: 'Hello World',
 				},
 			],
+			callback: function (action) {
+				self.doAction(action)
+			},
 		}
-		this.setActions(actions)
-	}
 
-	/**
-	 * Executes the provided action.
-	 *
-	 * @param {Object} action - the action to be executed
-	 * @access public
-	 * @since 1.0.0
-	 */
-	async action(action) {
-		const opt = action.options
+		self.setActionDefinitions(actions);
+	},
+
+	// Select action and make API call
+	doAction: function (act) {
+		const opt = act.options
 		let cmd, method
 
-		switch (action.action) {
+		switch (act.actionId) {
 			case 'play':
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/play`
@@ -222,7 +306,12 @@ class instance extends instance_skel {
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
 				break
+			case 'controlRundownItem':
+				method = 'GET'
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/controlRundownItemByID?file=${opt.file}&item=${opt.id}&command=${opt.command}`
+				break
 		}
+		console.log(cmd);
 		if (cmd != undefined) {
 			switch (method) {
 				case 'GET':
@@ -246,111 +335,4 @@ class instance extends instance_skel {
 			}
 		}
 	}
-
-	/**
-	 * Creates the configuration fields for web config.
-	 *
-	 * @returns {Array} the config fields
-	 * @access public
-	 * @since 1.0.0
-	 */
-	config_fields() {
-		return [
-			{
-				type: 'text',
-				id: 'info',
-				width: 12,
-				label: 'Information',
-				value: 'This modules connects to SPX-GC',
-			},
-			{
-				type: 'textinput',
-				label: 'Target IP',
-				id: 'host',
-				width: 6,
-				regex: this.REGEX_IP,
-				default: '127.0.0.1',
-				required: true,
-			},
-			{
-				type: 'textinput',
-				label: 'Target port',
-				id: 'port',
-				width: 6,
-				regex: this.REGEX_PORT,
-				default: '5000',
-				required: true,
-			}
-		]
-	}
-
-	/**
-	 * Clean up the instance before it is destroyed.
-	 *
-	 * @access public
-	 * @since 1.0.0
-	 */
-	destroy() {
-		debug('destroy', this.id)
-	}
-
-	/**
-	 * Main initialization function called once the module
-	 * is OK to start doing things.
-	 *
-	 * @access public
-	 * @since 1.0.0
-	 */
-	init() {
-		debug = this.debug
-
-		try {
-			this.status(this.STATUS_WARNING, 'Connecting')
-			this.initPresets()
-		} catch (e) {
-			console.error(e)
-		}
-		this.initConnection()
-	}
-
-	/**
-	 * INTERNAL: initialize presets.
-	 *
-	 * @access protected
-	 * @since 1.1.0
-	 */
-	async initPresets() {
-		this.rundownItems = await getRundown(this.config.host,this.config.port)
-		this.setPresetDefinitions(initPresets.bind(this)())
-	}
-
-	/**
-	 * INTERNAL: initalize the connection.
-	 *
-	 * @access protected
-	 * @since 1.0.0
-	 */
-	initConnection() {
-		this.status(this.STATUS_OK, 'Connected')
-	}
-
-	/**
-	 * Process an updated configuration array.
-	 *
-	 * @param {Object} config - the new configuration
-	 * @access public
-	 * @since 1.0.0
-	 */
-	updateConfig(config) {
-		if (this.config.host !== config.address) {
-			this.status(this.STATUS_WARNING, 'Connecting')
-		}
-
-		this.config = config
-		this.actions()
-		this.initPresets()
-		this.initConnection()
-	}
 }
-
-exports = module.exports = instance
