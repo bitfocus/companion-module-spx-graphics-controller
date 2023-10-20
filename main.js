@@ -13,7 +13,7 @@ class ModuleInstance extends InstanceBase {
 			...actions,
 			...feedbacks,
 			...variables,
-			//...presets,
+			//...presets, //TODO: convert to companion 3
 		})
 	}
 
