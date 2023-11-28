@@ -1,16 +1,16 @@
 {
-	"id": "spx-grapics-controller-fork",
+	"id": "spx-grapics-controller",
 	"name": "SPX Graphics Controller",
-	"shortname": "spx-fork",
-	"description": "",
+	"shortname": "spx",
+	"description": "Interface to SPX Graphics Controller",
 	"version": "0.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-your-module-name.git",
-	"bugs": "https://github.com/bitfocus/companion-module-your-module-name/issues",
+	"repository": "git+https://github.com/bitfocus/companion-module-spx-graphics-controller.git",
+	"bugs": "https://github.com/bitfocus/companion-module-spx-graphics-controller/issues",
 	"maintainers": [
 		{
-			"name": "Your name",
-			"email": "Your email"
+			"name": "Jeffrey Devidz",
+			"email": "jeffrey.davidsz@vicreo.eu"
 		}
 	],
 	"runtime": {
@@ -20,7 +20,7 @@
 		"entrypoint": "../main.js"
 	},
 	"legacyIds": [],
-	"manufacturer": "Your company",
-	"products": ["Your product"],
+	"manufacturer": "spx",
+	"products": ["gc"],
 	"keywords": []
 }
