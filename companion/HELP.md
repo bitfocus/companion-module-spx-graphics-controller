@@ -1,4 +1,4 @@
-SPX-GC is an open source graphics controller that runs graphics using HTML and Javascript templates. In addition to the web renderer it also interfaces with Casper CG.
+SPX is an open source graphics controller that runs graphics using HTML and Javascript templates. In addition to the web renderer it also interfaces with Casper CG.
 [https://www.spxgc.com/]
 [https://github.com/TuomoKu/SPX-GC]
 
@@ -14,7 +14,7 @@ Commands to load playlists, move focus on the opened rundown etc.
 * Move focus to the first item on the rundown
 * Move focus down to the next item
 * Move focus up to the previous item
-* Move focus to the last item on the rundown
+* Move focus to the last item on the 
 * Animate all layers out (does not clear layers)
 * Open rundown from project / file ** NEEDS TESTING **
 
