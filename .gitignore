@@ -5,3 +5,4 @@ pkg.tgz
 companion-module-spx.code-workspace
 .DS_Store
 .DS_Store
+/pkg
