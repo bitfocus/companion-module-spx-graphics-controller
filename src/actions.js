@@ -1,16 +1,16 @@
 module.exports = {
 	// Define and expose available actions to SPX
 	initActions: function () {
-		let self = this;
-		let actions = {};
+		let self = this
+		let actions = {}
 
 		actions.play = {
-			name: "Start focused item",
+			name: 'Start focused item',
 			options: [],
 			callback: function (action) {
 				self.doAction(action)
-			}
-		};
+			},
+		}
 
 		actions.play_ID = {
 			name: 'Start item by ID',
@@ -24,9 +24,8 @@ module.exports = {
 			],
 			callback: function (action) {
 				self.doAction(action)
-			}
-		};
-
+			},
+		}
 
 		actions.continue = {
 			name: 'Continue focused item',
@@ -106,6 +105,20 @@ module.exports = {
 			},
 		}
 
+		actions.focus_ID = {
+			name: 'Focus on item by ID',
+			options: [
+				{
+					type: 'textinput',
+					label: 'ID',
+					id: 'id',
+					default: '0123456789',
+				},
+			],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
 		actions.stopAllLayers = {
 			name: 'Stop all layers',
 			options: [],
@@ -128,7 +141,6 @@ module.exports = {
 				self.doAction(action)
 			},
 		}
-
 
 		actions.controlRundownItem = {
 			name: 'Play/Stop/Continue an item from a known rundown',
@@ -241,7 +253,7 @@ module.exports = {
 			},
 		}
 
-		self.setActionDefinitions(actions);
+		self.setActionDefinitions(actions)
 	},
 
 	// Select action and make API call
@@ -290,6 +302,10 @@ module.exports = {
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusLast`
 				break
+			case 'focus_ID':
+				method = 'GET'
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusByID/${opt.id}`
+				break
 			case 'stopAllLayers':
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/stopAllLayers`
@@ -304,14 +320,15 @@ module.exports = {
 				break
 			case 'invokeTemplateFunction':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/invokeTemplateFunction?playserver=${playserver}&playchannel=${playchannel}&playlayer=${playlayer}&webplayout=${webplayout}&function=${customfunction}&params=${params}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/invokeTemplateFunction?playserver=${opt.playserver}&playchannel=${opt.playchannel}&playlayer=${opt.playlayer}&webplayout=${opt.webplayout}&function=${opt.customFunction}&params=${opt.params}`
 				break
 			case 'controlRundownItem':
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/controlRundownItemByID?file=${opt.file}&item=${opt.id}&command=${opt.command}`
 				break
 		}
-		console.log(cmd);
+		console.log(cmd)
+
 		if (cmd != undefined) {
 			switch (method) {
 				case 'GET':
@@ -334,5 +351,5 @@ module.exports = {
 					break
 			}
 		}
-	}
+	},
 }

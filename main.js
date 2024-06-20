@@ -1,9 +1,9 @@
 const { InstanceBase, Regex, runEntrypoint, InstanceStatus } = require('@companion-module/base')
-const UpgradeScripts = require('./upgrades')
-const actions = require('./actions')
-const feedbacks = require('./feedbacks')
-const variables = require('./variables')
-
+const UpgradeScripts = require('./src/upgrades')
+const actions = require('./src/actions')
+const feedbacks = require('./src/feedbacks')
+const variables = require('./src/variables')
+const { io } = require('socket.io-client')
 class ModuleInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
@@ -13,6 +13,7 @@ class ModuleInstance extends InstanceBase {
 			...actions,
 			...feedbacks,
 			...variables,
+
 			//...presets, //TODO: convert to companion 3
 		})
 	}
@@ -20,11 +21,21 @@ class ModuleInstance extends InstanceBase {
 	async init(config) {
 		this.config = config
 
-		this.updateStatus(InstanceStatus.Ok)
+		this.updateStatus(InstanceStatus.Connecting)
 
 		this.initActions() // export actions
 		//this.updateFeedbacks() // export feedbacks
 		this.initVariables() // export variable definitions
+		this.log('info', `Connecting to socket http://${this.config.host}:${this.config.port}...`)
+		this.socket = io(`http://${this.config.host}:${this.config.port}`)
+
+		this.socket.on('connect', () => {
+			this.log('info', `Connected: ${this.socket.id}`)
+			this.updateStatus(InstanceStatus.Ok)
+		})
+		this.socket.on('SPXMessage2Client', (data) => {
+			this.updateVariablesFromSocket(data)
+		})
 	}
 	// When module gets deleted
 	async destroy() {
@@ -78,6 +89,5 @@ class ModuleInstance extends InstanceBase {
 		UpdateVariableDefinitions(this)
 	}
 }
-
 
 runEntrypoint(ModuleInstance, UpgradeScripts)
