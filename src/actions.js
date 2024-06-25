@@ -26,6 +26,36 @@ module.exports = {
 				self.doAction(action)
 			},
 		}
+		actions.customApiFunc = {
+			name: 'Run custom API function',
+			options: [
+				{
+					type: 'textinput',
+					label: 'api',
+					id: 'api',
+					default: 'item/play',
+				},
+				{
+					type: 'dropdown',
+					label: 'method',
+					id: 'method',
+					choices: [
+						{ id: 'GET', label: 'GET' },
+						{ id: 'POST', label: 'POST' },
+					],
+					default: 'GET',
+				},
+				{
+					type: 'textinput',
+					label: 'Body',
+					id: 'body',
+					default: '',
+				},
+			],
+			callback: function (action) {
+				self.doAction(action)
+			},
+		}
 
 		actions.continue = {
 			name: 'Continue focused item',
@@ -326,28 +356,36 @@ module.exports = {
 				method = 'GET'
 				cmd = `http://${this.config.host}:${this.config.port}/api/v1/controlRundownItemByID?file=${opt.file}&item=${opt.id}&command=${opt.command}`
 				break
+			case 'customApiFunc':
+				method = `${opt.method}`
+				cmd = `http://${this.config.host}:${this.config.port}/api/v1/${opt.api}`
+				break
 		}
 		console.log(cmd)
 
 		if (cmd != undefined) {
 			switch (method) {
 				case 'GET':
-					fetch(cmd)
-						.then((res) => res.text())
-						.then((body) => this.log('info', body))
-						.catch((err) => console.log(err))
+					this.parseVariablesInString(cmd).then((cmd) => {
+						fetch(cmd)
+							.then((res) => res.text())
+							.then((body) => this.log('info', body))
+							.catch((err) => console.log(err))
+					})
 					break
 
 				case 'POST':
 					console.log(JSON.stringify(opt.body))
-					fetch(cmd, {
-						method: 'post',
-						body: JSON.stringify(opt.body),
-						headers: { 'Content-Type': 'application/json' },
+					this.parseVariablesInString(cmd).then((cmd) => {
+						fetch(cmd, {
+							method: 'post',
+							body: JSON.stringify(opt.body),
+							headers: { 'Content-Type': 'application/json' },
+						})
+							.then((res) => res.text())
+							.then((body) => this.log('info', body))
+							.catch((err) => console.log(err))
 					})
-						.then((res) => res.text())
-						.then((body) => this.log('info', body))
-						.catch((err) => console.log(err))
 					break
 			}
 		}
