@@ -1,7 +1,6 @@
 const { InstanceBase, Regex, runEntrypoint, InstanceStatus } = require('@companion-module/base')
 const configs = require('./src/configs')
 const UpgradeScripts = require('./src/upgrades')
-const actions = require('./src/recycle/actions')
 const feedbacks = require('./src/feedbacks')
 const { SPXConnection } = require('./src/connectionClass')
 const { SPXVariables } = require('./src/variablesClass')
