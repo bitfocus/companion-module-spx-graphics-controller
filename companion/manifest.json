@@ -1,6 +1,6 @@
 {
-	"id": "spx-graphics-controller",
-	"name": "SPX Graphics Controller",
+	"id": "spx-graphics-controller-custom",
+	"name": "SPX Graphics Controller (fork)",
 	"shortname": "spx",
 	"description": "Interface to SPX Graphics Controller",
 	"version": "0.0.0",
@@ -11,6 +11,10 @@
 		{
 			"name": "Jeffrey Devidz",
 			"email": "jeffrey.davidsz@vicreo.eu"
+		},
+		{
+			"name": "Nick Semenov",
+			"email": "semenov_nick@mail.ru"
 		}
 	],
 	"runtime": {
@@ -19,8 +23,12 @@
 		"apiVersion": "0.0.0",
 		"entrypoint": "../main.js"
 	},
-	"legacyIds": ["spx-gc"],
+	"legacyIds": [
+		"spx-gc-custom"
+	],
 	"manufacturer": "spx",
-	"products": ["gc"],
+	"products": [
+		"gc-custom"
+	],
 	"keywords": []
 }
