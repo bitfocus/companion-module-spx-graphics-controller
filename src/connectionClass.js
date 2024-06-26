@@ -1,6 +1,6 @@
 // @ts-check
 const EventEmitter = require('events')
-const { InstanceStatus, InstanceBase } = require('@companion-module/base')
+const { InstanceStatus } = require('@companion-module/base')
 const { io } = require('socket.io-client')
 const { SPXModuleType } = require('./types')
 
@@ -11,7 +11,7 @@ class SPXConnection extends EventEmitter {
 	 */
 	constructor(instance) {
 		super()
-		/** Connection Status
+		/** Parent instamce of SPX Module
 		 * @type {SPXModuleType}
 		 */
 		this.instance = instance
@@ -20,7 +20,7 @@ class SPXConnection extends EventEmitter {
 		 * @public
 		 */
 		this.status = InstanceStatus.Disconnected
-		/** Connection Status
+		/** Socket IO instance
 		 * @type {import("socket.io-client").Socket | null  }
 		 * @private
 		 */
@@ -48,16 +48,22 @@ class SPXConnection extends EventEmitter {
 			if (this.socket != null) {
 				this.socket.emit('SPXMessage2Server', { spxcmd: 'identifyClient', name: this.name })
 			}
+			this.emit('connect')
 		})
 		this.socket.on('SPXMessage2Client', (data) => {
 			this.emit('SPXMessage2Client', data)
 		})
 
+		this.socket.on('SPXMessage2Controller', (data) => {
+			// this is message for web controller. Recieved if someone make some external api request
+			this.log('debug', `SPXMessage2Controller: ${JSON.stringify(data)}`)
+		})
 		this.socket.on('disconnect', () => {
 			this.log('info', `Disconnected from SPX-GC`)
 			this.isConnected = false
 			this.updateStatus(InstanceStatus.Disconnected)
 			this.reconnectToSPX()
+			this.emit('disconnect')
 		})
 		this.socket.on('connect_error', (error) => {
 			if (this.socket?.active) {

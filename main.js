@@ -3,8 +3,8 @@ const configs = require('./src/configs')
 const UpgradeScripts = require('./src/upgrades')
 const actions = require('./src/actions')
 const feedbacks = require('./src/feedbacks')
-const variables = require('./src/variables')
 const { SPXConnection } = require('./src/connectionClass')
+const { SPXVariables } = require('./src/variablesClass')
 
 class SPXModuleInstance extends InstanceBase {
 	constructor(internal) {
@@ -26,8 +26,9 @@ class SPXModuleInstance extends InstanceBase {
 		this.config = config
 		this.updateStatus(InstanceStatus.Connecting)
 
-		// this.initConnection()
 		this.connection = new SPXConnection(this)
+		this.variables = new SPXVariables(this)
+
 		// this.initVariables() // export variable definitions
 		// this.initActions() // export actions
 		//this.updateFeedbacks() // export feedbacks

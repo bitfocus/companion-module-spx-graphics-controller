@@ -1,5 +1,6 @@
 'use strict'
 const { InstanceBase, Regex, runEntrypoint, InstanceStatus } = require('@companion-module/base')
+const { SPXConnection } = require('./connectionClass')
 
 /**
  * @typedef {Object} SPXConfig - type of config
@@ -16,6 +17,8 @@ class SPXModuleType extends InstanceBase {
 	constructor() {
 		/**@type {SPXConfig} */
 		this.config = {}
+		/**@type {SPXConnection} */
+		this.connection = {}
 	}
 }
 module.exports = {
