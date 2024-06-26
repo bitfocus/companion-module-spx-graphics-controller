@@ -13,12 +13,12 @@ class SPXVariables {
 		 */
 		this.instance = instance
 		/** DefaultVariableDefinitions
-		 * @type {{variableId: string, name:string}[]}
+		 * @type {import('@companion-module/base').CompanionVariableDefinition[]}
 		 * @private
 		 */
 		this.defaultVariablesDefinitions = []
 		/** currentVariableDefinitions
-		 * @type {{variableId: string, name:string}[]}
+		 * @type {import('@companion-module/base').CompanionVariableDefinition[]}
 		 * @private
 		 */
 		this.currentRundownVariablesDefinitions = []
@@ -142,11 +142,11 @@ class SPXVariables {
 	setAllVariablesDefinition() {
 		let variableDefinitionsForSet = this.defaultVariablesDefinitions.concat(this.currentRundownVariablesDefinitions)
 
-		this.instance.setVariableDefinitions(this.currentRundownVariablesDefinitions)
+		this.instance.setVariableDefinitions(variableDefinitionsForSet)
 	}
 	/** handle IO Messages from SPX Server
-	 * @param {{variableId: string, name:string}[]} oldVariablesDefinitions
-	 * @param {{variableId: string, name:string}[]} newVariablesDefinitions
+	 * @param {import('@companion-module/base').CompanionVariableDefinition[]} oldVariablesDefinitions
+	 * @param {import('@companion-module/base').CompanionVariableDefinition[]} newVariablesDefinitions
 	 * @private
 	 */
 	deleteUnusedValues(oldVariablesDefinitions, newVariablesDefinitions) {
@@ -234,7 +234,7 @@ class SPXVariables {
 		this.fetchUpdateVariables()
 	}
 	/**
-	 * Connection log.
+	 * Variables log.
 	 * @param {import('@companion-module/base').LogLevel} level - log Level.
 	 * @param {string} message - message
 	 */

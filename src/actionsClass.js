@@ -1,18 +1,34 @@
-module.exports = {
-	// Define and expose available actions to SPX
-	initActions: function () {
-		let self = this
-		let actions = {}
+//@ts-check
+const { SPXModuleType } = require('./types')
 
-		actions.play = {
+class SPXActions {
+	/**
+	 * @constructor
+	 * @param {SPXModuleType} instance - parent instance of SPX Module.
+	 */
+	constructor(instance) {
+		/** Connection Status
+		 * @type {SPXModuleType}
+		 */
+		this.instance = instance
+		/** Actions
+		 * @type {import('@companion-module/base').CompanionActionDefinitions}
+		 * @private
+		 */
+		this.actions = {}
+		this.init()
+	}
+
+	init() {
+		const self = this
+		this.actions.play = {
 			name: 'Start focused item',
 			options: [],
 			callback: function (action) {
 				self.doAction(action)
 			},
 		}
-
-		actions.play_ID = {
+		this.actions.play_ID = {
 			name: 'Start item by ID',
 			options: [
 				{
@@ -26,7 +42,7 @@ module.exports = {
 				self.doAction(action)
 			},
 		}
-		actions.customApiFunc = {
+		this.actions.customApiFunc = {
 			name: 'Run custom API function',
 			options: [
 				{
@@ -57,7 +73,7 @@ module.exports = {
 			},
 		}
 
-		actions.continue = {
+		this.actions.continue = {
 			name: 'Continue focused item',
 			options: [],
 			callback: function (action) {
@@ -65,7 +81,7 @@ module.exports = {
 			},
 		}
 
-		actions.continue_ID = {
+		this.actions.continue_ID = {
 			name: 'Continue item by ID',
 			options: [
 				{
@@ -80,7 +96,7 @@ module.exports = {
 			},
 		}
 
-		actions.stop = {
+		this.actions.stop = {
 			name: 'Stop focused item',
 			options: [],
 			callback: function (action) {
@@ -88,7 +104,7 @@ module.exports = {
 			},
 		}
 
-		actions.stop_ID = {
+		this.actions.stop_ID = {
 			name: 'Stop item by ID',
 			options: [
 				{
@@ -103,7 +119,7 @@ module.exports = {
 			},
 		}
 
-		actions.focusFirst = {
+		this.actions.focusFirst = {
 			name: 'Focus on the first item',
 			options: [],
 			callback: function (action) {
@@ -111,7 +127,7 @@ module.exports = {
 			},
 		}
 
-		actions.focusNext = {
+		this.actions.focusNext = {
 			name: 'Focus on the next item',
 			options: [],
 			callback: function (action) {
@@ -119,7 +135,7 @@ module.exports = {
 			},
 		}
 
-		actions.focusPrevious = {
+		this.actions.focusPrevious = {
 			name: 'Focus on the previous item',
 			options: [],
 			callback: function (action) {
@@ -127,7 +143,7 @@ module.exports = {
 			},
 		}
 
-		actions.focusLast = {
+		this.actions.focusLast = {
 			name: 'Focus on the last item',
 			options: [],
 			callback: function (action) {
@@ -135,7 +151,7 @@ module.exports = {
 			},
 		}
 
-		actions.focus_ID = {
+		this.actions.focus_ID = {
 			name: 'Focus on item by ID',
 			options: [
 				{
@@ -149,7 +165,7 @@ module.exports = {
 				self.doAction(action)
 			},
 		}
-		actions.stopAllLayers = {
+		this.actions.stopAllLayers = {
 			name: 'Stop all layers',
 			options: [],
 			callback: function (action) {
@@ -157,7 +173,7 @@ module.exports = {
 			},
 		}
 
-		actions.openRundown = {
+		this.actions.openRundown = {
 			name: 'Open rundown',
 			options: [
 				{
@@ -172,7 +188,7 @@ module.exports = {
 			},
 		}
 
-		actions.controlRundownItem = {
+		this.actions.controlRundownItem = {
 			name: 'Play/Stop/Continue an item from a known rundown',
 			options: [
 				{
@@ -204,7 +220,7 @@ module.exports = {
 			},
 		}
 
-		actions.directplayout = {
+		this.actions.directplayout = {
 			name: 'Direct playout',
 			options: [
 				{
@@ -220,7 +236,7 @@ module.exports = {
 			},
 		}
 
-		actions.invokeTemplateFunction = {
+		this.actions.invokeTemplateFunction = {
 			name: 'Invoke template function',
 			options: [
 				{
@@ -283,82 +299,84 @@ module.exports = {
 			},
 		}
 
-		self.setActionDefinitions(actions)
-	},
-
-	// Select action and make API call
-	doAction: function (act) {
-		const opt = act.options
+		this.instance.setActionDefinitions(this.actions)
+	}
+	/** Doing actions
+	 * @param {import('@companion-module/base').CompanionActionEvent} action
+	 * @private
+	 */
+	doAction(action) {
+		this.log('warn', JSON.stringify(action))
+		const opt = action.options
 		let cmd, method
-
-		switch (act.actionId) {
+		switch (action.actionId) {
 			case 'play':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/play`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/play`
 				break
 			case 'play_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/play/${opt.id}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/play/${opt.id}`
 				break
 			case 'continue':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/continue`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/continue`
 				break
 			case 'continue_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/continue/${opt.id}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/continue/${opt.id}`
 				break
 			case 'stop':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/stop`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/stop`
 				break
 			case 'stop_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/item/stop/${opt.id}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/item/stop/${opt.id}`
 				break
 			case 'focusFirst':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusFirst`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/focusFirst`
 				break
 			case 'focusNext':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusNext`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/focusNext`
 				break
 			case 'focusPrevious':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusPrevious`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/focusPrevious`
 				break
 			case 'focusLast':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusLast`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/focusLast`
 				break
 			case 'focus_ID':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/focusByID/${opt.id}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/focusByID/${opt.id}`
 				break
 			case 'stopAllLayers':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/stopAllLayers`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/stopAllLayers`
 				break
 			case 'openRundown':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/rundown/load?file=${opt.rundown}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/rundown/load?file=${opt.rundown}`
 				break
 			case 'directplayout':
 				method = 'POST'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/directplayout`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/directplayout`
 				break
 			case 'invokeTemplateFunction':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/invokeTemplateFunction?playserver=${opt.playserver}&playchannel=${opt.playchannel}&playlayer=${opt.playlayer}&webplayout=${opt.webplayout}&function=${opt.customFunction}&params=${opt.params}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/invokeTemplateFunction?playserver=${opt.playserver}&playchannel=${opt.playchannel}&playlayer=${opt.playlayer}&webplayout=${opt.webplayout}&function=${opt.customFunction}&params=${opt.params}`
 				break
 			case 'controlRundownItem':
 				method = 'GET'
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/controlRundownItemByID?file=${opt.file}&item=${opt.id}&command=${opt.command}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/controlRundownItemByID?file=${opt.file}&item=${opt.id}&command=${opt.command}`
 				break
 			case 'customApiFunc':
 				method = `${opt.method}`
-				cmd = `http://${this.config.host}:${this.config.port}/api/v1/${opt.api}`
+				cmd = `http://${this.instance.config.host}:${this.instance.config.port}/api/v1/${opt.api}`
 				break
 		}
 		console.log(cmd)
@@ -366,7 +384,7 @@ module.exports = {
 		if (cmd != undefined) {
 			switch (method) {
 				case 'GET':
-					this.parseVariablesInString(cmd).then((cmd) => {
+					this.instance.parseVariablesInString(cmd).then((cmd) => {
 						fetch(cmd)
 							.then((res) => res.text())
 							.then((body) => this.log('info', body))
@@ -376,7 +394,7 @@ module.exports = {
 
 				case 'POST':
 					console.log(JSON.stringify(opt.body))
-					this.parseVariablesInString(cmd).then((cmd) => {
+					this.instance.parseVariablesInString(cmd).then((cmd) => {
 						fetch(cmd, {
 							method: 'post',
 							body: JSON.stringify(opt.body),
@@ -389,5 +407,16 @@ module.exports = {
 					break
 			}
 		}
-	},
+	}
+	/**
+	 * Actions log.
+	 * @param {import('@companion-module/base').LogLevel} level - log Level.
+	 * @param {string} message - message
+	 */
+	log(level, message) {
+		return this.instance.log(level, message)
+	}
+}
+module.exports = {
+	SPXActions,
 }

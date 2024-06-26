@@ -1,11 +1,11 @@
 const { InstanceBase, Regex, runEntrypoint, InstanceStatus } = require('@companion-module/base')
 const configs = require('./src/configs')
 const UpgradeScripts = require('./src/upgrades')
-const actions = require('./src/actions')
+const actions = require('./src/recycle/actions')
 const feedbacks = require('./src/feedbacks')
 const { SPXConnection } = require('./src/connectionClass')
 const { SPXVariables } = require('./src/variablesClass')
-
+const { SPXActions } = require('./src/actionsClass')
 class SPXModuleInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
@@ -28,6 +28,7 @@ class SPXModuleInstance extends InstanceBase {
 
 		this.connection = new SPXConnection(this)
 		this.variables = new SPXVariables(this)
+		this.variables = new SPXActions(this)
 
 		// this.initVariables() // export variable definitions
 		// this.initActions() // export actions
